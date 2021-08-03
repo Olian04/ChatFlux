@@ -51,7 +51,7 @@ const Counter = factory<CountState, CountAction>({
   render: renderer,
 });
 
-app.on('message', message) => {
+app.on('message', message => {
   if (message.content !== '!count') return;
   const channel = message.channel;
   const msg = channel.send('Loading...');
