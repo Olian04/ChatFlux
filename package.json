@@ -1,0 +1,28 @@
+{
+  "name": "@olian/expert-waffle",
+  "version": "1.0.0",
+  "description": "An architecture for managing dynamic messages in discord, inspired by the flux architecture.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "mocha  --recursive -r ts-node/register 'tests/**/*.test.ts' ",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Olian04/expert-waffle.git"
+  },
+  "author": "Olian04",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Olian04/expert-waffle/issues"
+  },
+  "homepage": "https://github.com/Olian04/expert-waffle#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "chai": "^4.3.4",
+    "mocha": "^9.0.3",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  }
+}
