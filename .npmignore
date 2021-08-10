@@ -1,0 +1,6 @@
+demo/
+tests/
+src/
+!dist/
+.editorconfig
+tsconfig.json

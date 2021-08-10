@@ -15,19 +15,21 @@ export const app = new Client({
 const emoji = {
   thumbsUp: '👍',
   thumbsDown: '👎',
-}
+};
 
 app.on('messageCreate', async (message) => {
   if (message.content !== '!count') return;
-  console.debug(`Received command (Content: ${message.content}) (ID: ${message.id})`);
+  console.debug(
+    `Received command (Content: ${message.content}) (ID: ${message.id})`
+  );
   try {
     message.delete();
-  } catch {};
+  } catch {}
   const response = await message.channel.send('Loading...');
   console.debug(`Sent response (ID: ${response.id})`);
 
   const id = response.id;
-  const body = Counter.create(id);
+  const body = await Counter.create(id);
   response.edit(body);
   console.debug(`Updated body (Content: ${body}) (ID: ${response.id})`);
 
@@ -35,24 +37,33 @@ app.on('messageCreate', async (message) => {
   response.react(emoji.thumbsDown);
 });
 
-app.on('messageReactionAdd', (reaction) => {
-  console.debug(`Reaction (Emoji: ${reaction.emoji.name}) added to message (ID: ${reaction.message.id})`);
+app.on('messageReactionAdd', async (reaction) => {
+  console.debug(
+    `Reaction (Emoji: ${reaction.emoji.name}) added to message (ID: ${reaction.message.id})`
+  );
   const message = reaction.message;
   const id = message.id;
-  if (!Counter.has(id)) return;
+  if (!(await Counter.has(id))) return;
 
   const emojiName = reaction.emoji.name;
 
   const action =
-    emojiName === emoji.thumbsUp ? 'increment' :
-    emojiName === emoji.thumbsDown ? 'decrement':
-    'N/A';
+    emojiName === emoji.thumbsUp
+      ? 'increment'
+      : emojiName === emoji.thumbsDown
+      ? 'decrement'
+      : 'N/A';
 
   if (action === 'N/A') return;
 
   console.debug(`Updating counter (Action: ${action}) (ID: ${message.id})`);
-  const users = [...reaction.users.cache.filter(user => !user.bot)].map(([_, user]) => user);
-  const newBody = users.reduce(() => Counter.update(id, action), null);
+  const users = [...reaction.users.cache.filter((user) => !user.bot)].map(
+    ([_, user]) => user
+  );
+  let newBody: string | null = null;
+  for (const _ in users) {
+    newBody = await Counter.update(id, action);
+  }
   if (newBody === null) {
     // Only bot reactions
     return;
@@ -62,13 +73,16 @@ app.on('messageReactionAdd', (reaction) => {
 
   users.forEach((user) => {
     reaction.users.remove(user);
-    console.debug(`Removed reaction (User ID: ${user.id}) (Message ID: ${message.id})`);
+    console.debug(
+      `Removed reaction (User ID: ${user.id}) (Message ID: ${message.id})`
+    );
   });
 });
 
 (async () => {
   const { discord_secret } = await import('./secrets.json');
-  app.login(discord_secret)
+  app
+    .login(discord_secret)
     .then(() => console.info('Successfully logged in'))
     .catch((e) => console.error('Failed to log in:', e));
 })();

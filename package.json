@@ -1,13 +1,13 @@
 {
   "name": "chatflux",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "ChatFlux: An extended flux implementation designed for usage with chat bots.",
   "main": "./dist/api.js",
   "types": "./dist/api.d.ts",
   "typings": "./dist/api.d.ts",
   "scripts": {
     "test": "mocha  --recursive -r ts-node/register 'tests/**/*.test.ts' ",
-    "build": "tsc",
+    "build": "npx rimraf ./dist && tsc",
     "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {

@@ -7,7 +7,7 @@ import { renderer } from '../util/countRenderer';
 import { reducer } from '../util/countReducer';
 
 describe(`Database`, () => {
-  it(`Shouldn't modify database if no creation nor updated has been issued.`, () => {
+  it(`Shouldn't modify database if no creation nor action has been dispatched.`, () => {
     const storage = new Map();
     const sizeBefore = storage.size;
     new ChatFlux<CountState, CountAction>({
@@ -20,18 +20,17 @@ describe(`Database`, () => {
 
   it(`Should add one entry to database on create.`, async () => {
     const storage = new Map();
-    const db = createDB(storage);
     const sizeBefore = storage.size;
     const Counter = new ChatFlux<CountState, CountAction>({
-      database: db,
+      database: createDB(storage),
       reduce: reducer,
       render: renderer,
     });
-    Counter.create('blue');
+    await Counter.create('blue');
     expect(storage.size).to.equal(sizeBefore + 1);
   });
 
-  it(`Should remove one entry from database on delete.`, () => {
+  it(`Should remove one entry from database on delete.`, async () => {
     const storage = new Map();
     const sizeBefore = storage.size;
     const Counter = new ChatFlux<CountState, CountAction>({
@@ -39,23 +38,22 @@ describe(`Database`, () => {
       reduce: reducer,
       render: renderer,
     });
-    Counter.create('blue');
+    await Counter.create('blue');
     expect(storage.size).to.equal(sizeBefore + 1);
-    Counter.delete('blue');
+    await Counter.delete('blue');
     expect(storage.size).to.equal(sizeBefore);
   });
 
-  it(`Should update data in database when action is dispatched.`, () => {
+  it(`Should update data when action is dispatched.`, async () => {
     const storage = new Map();
-    const sizeBefore = storage.size;
     const Counter = new ChatFlux<CountState, CountAction>({
       database: createDB(storage),
       reduce: reducer,
       render: renderer,
     });
-    Counter.create('blue');
-    expect(storage.size).to.equal(sizeBefore + 1);
-    Counter.delete('blue');
-    expect(storage.size).to.equal(sizeBefore);
+    await Counter.create('blue');
+    expect(storage.get('blue')).to.deep.equal({ count: 0 });
+    await Counter.update('blue', 'increment');
+    expect(storage.get('blue')).to.deep.equal({ count: 1 });
   });
 });

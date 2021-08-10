@@ -1,30 +1,15 @@
-# expert-waffle
+# ChatFlux
 
-An architecture for managing dynamic messages in discord, inspired by the flux architecture.
-
-## Usage
+An extended flux implementation designed for usage with chat bots.
 
 ```ts
+import { ChatFlux, Reducer, Renderer } from 'ChatFlux';
+import { db } from './db';
+
 type CountState = {
   count: number;
 }
 type CountAction = 'increment' | 'decrement';
-
-const storage = new Map<Identifier, CountState>();
-const db: SimpleDatabase<CountState> = {
-  get: id => {
-    const maybeData = storage.get(id);
-    if (!maybeData) {
-      throw new Error(`Unexpected ID: ${id}`);
-    }
-    return maybeData;
-  },
-  set: (id, newData) => {
-    storage.set(id, newData);
-  },
-  has: id => storage.has(id),
-  delete: id => storage.delete(id),
-}
 
 const reducer: Reducer<CountState, CountAction> = (state = { count: 0 }, action) => {
   switch (action) {
@@ -45,20 +30,20 @@ const reducer: Reducer<CountState, CountAction> = (state = { count: 0 }, action)
 
 const renderer: Renderer<CountState> = state => `Count: ${state.count}`;
 
-const Counter = factory<CountState, CountAction>({
+const Counter = new ChatFlux<CountState, CountAction>({
   database: db,
   reduce: reducer,
   render: renderer,
 });
 
-app.on('message', message => {
+app.on('message', async (message) => {
   if (message.content !== '!count') return;
   const msg = message.channel.send('Loading...');
-  const body = Counter.create(msg.id);
+  const body = await Counter.create(msg.id);
   msg.edit(body);
 
-  setInterval(() => {
-    const newBody = Counter.update(msg.id, 'increment');
+  setInterval(async () => {
+    const newBody = await Counter.update(msg.id, 'increment');
     msg.edit(newBody);
   }, 3000 /* 3 seconds */);
 });

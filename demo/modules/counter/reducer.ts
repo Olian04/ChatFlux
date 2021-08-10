@@ -1,4 +1,4 @@
-import { Reducer } from '@olian/expert-waffle';
+import { Reducer } from 'chatflux';
 import { CountAction, CountState } from './types';
 
 export const reducer: Reducer<CountState, CountAction> = (

@@ -5,8 +5,8 @@
   },
   "keywords": [],
   "dependencies": {
-    "@olian/expert-waffle": "file:..",
     "better-logging": "^4.5.0",
+    "chatflux": "file:..",
     "discord.js": "^13.0.1",
     "ts-node": "^10.2.0"
   }

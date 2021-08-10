@@ -12,8 +12,12 @@ export const createDB = (
       }
       return maybeData;
     },
-    set: (id, newData) => storage.set(id, newData),
+    set: async (id, newData) => {
+      storage.set(id, newData);
+    },
     has: async (id) => storage.has(id),
-    delete: (id) => storage.delete(id),
+    delete: async (id) => {
+      storage.delete(id);
+    },
   })
 };

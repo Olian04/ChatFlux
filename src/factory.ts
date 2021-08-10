@@ -23,14 +23,15 @@ export const factory = PseudoClass(function<State extends Serializeable, Action>
     return newBody;
   };
 
-  const create = async (id: Identifier) => {
+  const create = async (id: Identifier, onSaved?: () => void) => {
     if (await context.database.has(id)) {
       throw new Error(
         `ID Already in use: Cannot create using the same ID twice. (ID: ${id})`
       );
     }
     const state = context.reduce();
-    context.database.set(id, state);
+    context.database.set(id, state)
+      .then(() => onSaved?.());
     const newBody = context.render(state);
     return newBody;
   };
