@@ -1,5 +1,5 @@
-import { Reducer } from '../../src/api';
-import { CountAction, CountState } from './countTypes';
+import { Reducer } from '@olian/expert-waffle';
+import { CountAction, CountState } from './types';
 
 export const reducer: Reducer<CountState, CountAction> = (
   state = { count: 0 },

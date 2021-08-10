@@ -1,22 +1,25 @@
 {
-  "name": "@olian/expert-waffle",
+  "name": "chatflux",
   "version": "1.0.0",
-  "description": "An architecture for managing dynamic messages in discord, inspired by the flux architecture.",
-  "main": "dist/index.js",
+  "description": "ChatFlux: An extended flux implementation designed for usage with chat bots.",
+  "main": "./dist/api.js",
+  "types": "./dist/api.d.ts",
+  "typings": "./dist/api.d.ts",
   "scripts": {
     "test": "mocha  --recursive -r ts-node/register 'tests/**/*.test.ts' ",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm run test && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Olian04/expert-waffle.git"
+    "url": "git+https://github.com/Olian04/ChatFlux.git"
   },
   "author": "Olian04",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Olian04/expert-waffle/issues"
+    "url": "https://github.com/Olian04/ChatFlux/issues"
   },
-  "homepage": "https://github.com/Olian04/expert-waffle#readme",
+  "homepage": "https://github.com/Olian04/ChatFlux#readme",
   "devDependencies": {
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.0.0",
