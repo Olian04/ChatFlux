@@ -6,7 +6,7 @@ import { createDB } from '../util/inMemoryDatabase';
 import { renderer } from '../util/countRenderer';
 import { reducer } from '../util/countReducer';
 
-describe(`Database`, () => {
+describe(`Integration - Database`, () => {
   it(`Shouldn't modify database if no creation nor action has been dispatched.`, () => {
     const storage = new Map();
     const sizeBefore = storage.size;

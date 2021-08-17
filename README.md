@@ -2,6 +2,8 @@
 
 An extended flux implementation designed for usage with chat bots.
 
+Install: [`npm i chatflux`](https://www.npmjs.com/package/chatflux)
+
 ```ts
 import { ChatFlux, Reducer, Renderer } from 'ChatFlux';
 import { db } from './db';
