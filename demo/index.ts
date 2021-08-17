@@ -60,14 +60,14 @@ app.on('messageReactionAdd', async (reaction) => {
   const users = [...reaction.users.cache.filter((user) => !user.bot)].map(
     ([_, user]) => user
   );
-  let newBody: string | null = null;
-  for (const _ in users) {
-    newBody = await Counter.update(id, action);
-  }
-  if (newBody === null) {
+  if (users.length === 0) {
     // Only bot reactions
     return;
   }
+
+  await Promise.all(users.map(() => Counter.dispatch(id, action)));
+
+  const newBody = await Counter.get(id);
   message.edit(newBody || 'Internal Error');
   console.debug(`Updated body (Content: ${newBody}) (ID: ${message.id})`);
 
@@ -80,9 +80,9 @@ app.on('messageReactionAdd', async (reaction) => {
 });
 
 (async () => {
-  const { discord_secret } = await import('./secrets.json');
+  const { discord_token } = await import('./secrets.json');
   app
-    .login(discord_secret)
+    .login(discord_token)
     .then(() => console.info('Successfully logged in'))
     .catch((e) => console.error('Failed to log in:', e));
 })();
