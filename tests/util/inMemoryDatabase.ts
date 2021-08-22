@@ -2,13 +2,13 @@ import { Identifier, SimpleDatabase } from '../../src/api';
 import { CountState } from './countTypes';
 
 export const createDB = (
-  storage: Map<Identifier, CountState>,
+  storage: Map<Identifier, CountState>
 ): SimpleDatabase<CountState> => {
-  return ({
+  return {
     get: async (id) => {
       const maybeData = storage.get(id);
       if (!maybeData) {
-        throw new Error(`Unexpected ID: ${id}`);
+        throw new Error(`Unknown ID: ${id}`);
       }
       return maybeData;
     },
@@ -19,5 +19,5 @@ export const createDB = (
     delete: async (id) => {
       storage.delete(id);
     },
-  })
+  };
 };
