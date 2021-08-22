@@ -7,11 +7,12 @@ import { PseudoClass } from './util/PseudoClass';
 
 export const factory = PseudoClass(function <
   State extends Serializeable,
-  Action
+  Action,
+  RenderTarget = string
 >(context: {
   database: SimpleDatabase<State>;
   reduce: Reducer<State, Action>;
-  render: Renderer<State>;
+  render: Renderer<State, RenderTarget>;
 }) {
   const dispatch = async (id: Identifier, action: Action) => {
     if (!(await context.database.has(id))) {

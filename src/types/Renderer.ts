@@ -1,3 +1,1 @@
-import { Renderable } from './Renderable';
-
-export type Renderer<State> = (state: State) => Renderable;
+export type Renderer<State, RenderTarget> = (state: State) => RenderTarget;
