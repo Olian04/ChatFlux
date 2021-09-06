@@ -30,7 +30,7 @@ const reducer: Reducer<CountState, CountAction> = (state = { count: 0 }, action)
   }
 };
 
-const renderer: Renderer<CountState> = state => `Count: ${state.count}`;
+const renderer: Renderer<CountState, string> = state => `Count: ${state.count}`;
 
 const Counter = new ChatFlux<CountState, CountAction>({
   database: db,
