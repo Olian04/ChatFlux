@@ -16,7 +16,10 @@ export const factory = PseudoClass(function <
 }) {
   const _exists = async (id: Identifier) => context.database.has(id);
   const _delete = async (id: Identifier) => {
-    context.database.delete(id);
+    if (!(await _exists(id))) {
+      throw new Error(`Unknown ID: Cannot delete an unknown ID. (ID: ${id})`);
+    }
+    await context.database.delete(id);
   };
 
   const _dispatch = async (id: Identifier, action: Action) => {
@@ -32,7 +35,7 @@ export const factory = PseudoClass(function <
 
   const _render = async (id: Identifier) => {
     if (!(await _exists(id))) {
-      throw new Error(`Unknown ID: Cannot get an unknown ID. (ID: ${id})`);
+      throw new Error(`Unknown ID: Cannot render an unknown ID. (ID: ${id})`);
     }
     const state = await context.database.get(id);
     const newBody = context.render(state);
