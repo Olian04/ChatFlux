@@ -19,21 +19,21 @@ describe(`API - Dispatch`, () => {
 
     await Counter.create(id);
     expect(storage.get(id)).to.deep.equal({ count: 0 });
-    expect(await Counter.get(id)).to.equal('Count: 0');
+    expect(await Counter.render(id)).to.equal('Count: 0');
 
     for (let i = 1; i <= 10; i++) {
       expect(await Counter.dispatch(id, 'increment')).to.be.undefined;
       expect(storage.get(id)).to.deep.equal({ count: i });
-      expect(await Counter.get(id)).to.equal(`Count: ${i}`);
+      expect(await Counter.render(id)).to.equal(`Count: ${i}`);
     }
 
     expect(storage.get(id)).to.deep.equal({ count: 10 });
-    expect(await Counter.get(id)).to.equal(`Count: ${10}`);
+    expect(await Counter.render(id)).to.equal(`Count: ${10}`);
 
     for (let i = 10; i > 0; i--) {
       expect(await Counter.dispatch(id, 'decrement')).to.be.undefined;
       expect(storage.get(id)).to.deep.equal({ count: i - 1 });
-      expect(await Counter.get(id)).to.equal(`Count: ${i - 1}`);
+      expect(await Counter.render(id)).to.equal(`Count: ${i - 1}`);
     }
   });
 });

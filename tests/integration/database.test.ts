@@ -53,7 +53,7 @@ describe(`Integration - Database`, () => {
     });
     await Counter.create('blue');
     expect(storage.get('blue')).to.deep.equal({ count: 0 });
-    await Counter.update('blue', 'increment');
+    await Counter.dispatch('blue', 'increment');
     expect(storage.get('blue')).to.deep.equal({ count: 1 });
   });
 });

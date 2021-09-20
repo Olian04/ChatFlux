@@ -14,8 +14,13 @@ export const factory = PseudoClass(function <
   reduce: Reducer<State, Action>;
   render: Renderer<State, RenderTarget>;
 }) {
-  const dispatch = async (id: Identifier, action: Action) => {
-    if (!(await context.database.has(id))) {
+  const _exists = async (id: Identifier) => context.database.has(id);
+  const _delete = async (id: Identifier) => {
+    context.database.delete(id);
+  };
+
+  const _dispatch = async (id: Identifier, action: Action) => {
+    if (!(await _exists(id))) {
       throw new Error(
         `Unknown ID: Cannot dispatch to an unknown ID. (ID: ${id})`
       );
@@ -25,8 +30,8 @@ export const factory = PseudoClass(function <
     await context.database.set(id, newState);
   };
 
-  const get = async (id: Identifier) => {
-    if (!(await context.database.has(id))) {
+  const _render = async (id: Identifier) => {
+    if (!(await _exists(id))) {
       throw new Error(`Unknown ID: Cannot get an unknown ID. (ID: ${id})`);
     }
     const state = await context.database.get(id);
@@ -34,42 +39,23 @@ export const factory = PseudoClass(function <
     return newBody;
   };
 
-  const update = async (id: Identifier, action?: Action) => {
-    if (!(await context.database.has(id))) {
-      throw new Error(`Unknown ID: Cannot update an unknown ID. (ID: ${id})`);
-    }
-    if (action !== undefined) {
-      await dispatch(id, action);
-    }
-    return get(id);
-  };
-
-  const create = async (id: Identifier) => {
-    if (await context.database.has(id)) {
+  const _create = async (id: Identifier) => {
+    if (await _exists(id)) {
       throw new Error(
         `ID Already in use: Cannot create using the same ID twice. (ID: ${id})`
       );
     }
-    const state = context.reduce();
+    const state = context.reduce(undefined, undefined);
     await context.database.set(id, state);
     const newBody = context.render(state);
     return newBody;
   };
 
-  const getOrCreate = async (id: Identifier) => {
-    if (await context.database.has(id)) {
-      return get(id);
-    }
-    return create(id);
-  };
-
   return {
-    get,
-    create,
-    update,
-    dispatch,
-    getOrCreate,
-    has: (id: Identifier) => context.database.has(id),
-    delete: (id: Identifier) => context.database.delete(id),
+    render: _render,
+    create: _create,
+    dispatch: _dispatch,
+    exists: _exists,
+    delete: _delete,
   };
 });
