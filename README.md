@@ -46,7 +46,7 @@ app.on('message', async (message) => {
 
   setInterval(async () => {
     await Counter.dispatch(msg.id, 'increment');
-    const newBody = await Counter.get(msg.id);
+    const newBody = await Counter.render(msg.id);
     msg.edit(newBody);
   }, 3000 /* 3 seconds */);
 });
