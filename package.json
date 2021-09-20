@@ -1,6 +1,6 @@
 {
   "name": "chatflux",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "ChatFlux: An extended flux implementation designed for usage with chat bots.",
   "main": "./dist/api.js",
   "types": "./dist/api.d.ts",
