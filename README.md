@@ -1,3 +1,4 @@
+[![](https://img.shields.io/npm/l/chatflux)](https://github.com/Olian04/ChatFlux/blob/main/LICENSE)
 [![](https://img.shields.io/npm/v/chatflux/latest)](https://www.npmjs.com/package/chatflux)
 [![](https://img.shields.io/npm/dt/chatflux)](https://www.npmjs.com/package/chatflux)
 [![](https://img.shields.io/github/workflow/status/Olian04/ChatFlux/Node.js%20CI/main)](https://github.com/Olian04/ChatFlux/actions/workflows/nodejs.yml)
